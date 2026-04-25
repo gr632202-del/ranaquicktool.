@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickTools</title><meta name="google-site-verification" content="f3i_VzLU3Dg8rLjOfmhIRzJkTzmQMM9wvODjjVgcxLE" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
+    <style>
+        #qrCode {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 12px;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #0d47a1;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #0d47a1, #1976d2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(13, 71, 161, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .card:hover::before {
+            left: 100%;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(13, 71, 161, 0.3);
+            border-color: #0d47a1;
+        }
+        .card h2 {
+            margin-bottom: 1.5rem;
+            color: #1976d2;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #0d47a1;
+            box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #0d47a1, #1976d2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .qr-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        #qrCode {
+            max-width: 200px;
+            margin: 0 auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #0d47a1;
+            margin-top: 2rem;
+        }
+        .support-section {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .support-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(13, 71, 161, 0.1);
+            border-radius: 12px;
+        }
+        .support-icon {
+            width: 40px;
+            height: 40px;
+            background: #1976d2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+            .nav-container {
+                padding: 0 1rem;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fa-solid fa-wrench"></i> QuickTools</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2><i class="fa-solid fa-qrcode"></i> QR Code Generator</h2>
+            <div class="input-group">
+                <label for="qrInput">Enter text or URL:</label>
+                <input type="text" id="qrInput" placeholder="https://example.com or any text...">
+            </div>
+            <button onclick="generateQR()">Generate QR Code</button>
+            <div class="qr-container" id="qrContainer" style="display: none;">
+                <canvas id="qrCode"></canvas>
+                <div style="margin-top: 1rem;">
+                    <button onclick="downloadQR()"><i class="fa-solid fa-download"></i> Download QR</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-font"></i> Text Converter</h2>
+            <div class="input-group">
+                <label for="textInput">Enter your text:</label>
+                <textarea id="textInput" rows="6" placeholder="Type or paste your text here..."></textarea>
+            </div>
+            <div class="btn-group">
+                <button onclick="toUpperCase()">UPPERCASE</button>
+                <button onclick="toLowerCase()">lowercase</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-calculator"></i> Word Counter</h2>
+            <div class="input-group">
+                <label for="counterInput">Count words and characters:</label>
+                <textarea id="counterInput" rows="8" placeholder="Start typing to see real-time stats..."></textarea>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="wordCount">0</div>
+                    <div class="stat-label">Words</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="charCount">0</div>
+                    <div class="stat-label">Characters</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad 1: Native Banner -->
+    <div style="margin: 30px auto; text-align: center; max-width: 1200px; padding: 0 2rem;">
+        <script async="async" data-cfasync="false" src="https://pl29158993.profitablecpmratenetwork.com/8681a60985b8f6252af405c4bfe3c551/invoke.js"></script>
+        <div id="container-8681a60985b8f6252af405c4bfe3c551"></div>
+    </div>
+
+        <div class="footer">
+        <div class="support-section">
+           <h3 style="margin-bottom: 1.5rem; color: #1976d2;"><i class="fa-solid fa-headset"></i> Support/Contact</h3>
+            <div class="support-item">
+                <div class="support-icon"><i class="fa-solid fa-envelope"></i></div>
+                <div>
+                    <strong>Email:</strong><br>
+                    <a href="mailto:gr632202@gmail.com" style="color: #b0b0b0; text-decoration: none;">gr632202@gmail.com</a>
+                </div>
+            </div>
+            <div class="support-item">
+                <div class="support-icon"><i class="fa-brands fa-instagram"></i></div>
+                <div>
+                    <strong>Instagram:</strong><br>
+                    <a href="https://instagram.com/unknownvibex_" target="_blank" style="color: #b0b0b0; text-decoration: none;" rel="noopener">@unknownvibex_</a>
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; color: #b0b0b0;">Made with <i class="fa-solid fa-heart" style="color: #e25555;"></i> by <strong>Parth Rana</strong></p>
+    </div>
+
+    <script>
+        // Wait for page to load completely
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // QR Code Generator
+            window.generateQR = function() {
+    const input = document.getElementById('qrInput').value;
+    const container = document.getElementById('qrContainer');
+    const canvas = document.getElementById('qrCode');
+    
+    if (!input.trim()) {
+        alert('Please enter some text or URL');
+        return;
+    }
+    
+    container.style.display = 'block';
+    
+    // Clear previous QR code
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+    QRCode.toCanvas(canvas, input, {
+        width: 200,
+        margin: 2,
+        color: { dark: '#000000', light: '#FFFFFF' }
+    }, function (error) {
+        if (error) {
+            console.error(error);
+            alert('QR Code generate nahi hua. Dobara try karein.');
+        }
+    });
+}
+
+            window.downloadQR = function() {
+    const canvas = document.getElementById('qrCode');
+    
+    if (!canvas.width || canvas.width === 0) {
+        alert('Pehle QR code generate karo');
+        return;
+    }
+    
+    const imageData = canvas.toDataURL('image/png');
+    
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        const newWindow = window.open();
+        newWindow.document.write(`
+            <html>
+                <head><title>Save QR Code</title></head>
+                <body style="margin:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;">
+                    <img src="${imageData}" style="width:90%;max-width:400px;border-radius:12px;">
+                    <p style="color:white;font-family:sans-serif;text-align:center;padding:20px;">
+                        Image ko long press karo aur<br><b>"Save Image"</b> ya <b>"Download Image"</b> pe tap karo
+                    </p>
+                </body>
+            </html>
+        `);
+    } else {
+        const link = document.createElement('a');
+        link.download = 'QuickTools_QR_' + Date.now() + '.png';
+        link.href = imageData;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+            // Text Converter
+            window.toUpperCase = function() {
+                const textInput = document.getElementById('textInput');
+                textInput.value = textInput.value.toUpperCase();
+                updateCounter();
+            }
+
+            window.toLowerCase = function() {
+                const textInput = document.getElementById('textInput');
+                textInput.value = textInput.value.toLowerCase();
+                updateCounter();
+            }
+
+            // Word Counter
+            window.updateCounter = function() {
+                const text = document.getElementById('counterInput').value;
+                const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).filter(word => word.length > 0).length;
+                const chars = text.length;
+                document.getElementById('wordCount').textContent = words;
+                document.getElementById('charCount').textContent = chars;
+            }
+
+            // Event Listeners
+            document.getElementById('counterInput').addEventListener('input', updateCounter);
+
+            document.getElementById('textInput').addEventListener('input', function() {
+                document.getElementById('counterInput').value = this.value;
+                updateCounter();
+            });
+
+            document.getElementById('counterInput').addEventListener('input', function() {
+                document.getElementById('textInput').value = this.value;
+            });
+
+            document.getElementById('qrInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    generateQR();
+                }
+            });
+
+        });
+    </script>
+
+    <!-- Ad 2: 300x250 Banner -->
+    <div style="margin: 20px auto 40px; text-align: center;">
+        <script>
+          atOptions = {
+            'key' : 'b70dcc75811e7441ffca3bb23343873f',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/b70dcc75811e7441ffca3bb23343873f/invoke.js"></script>
+    </div>
+
+</body>
+</html>
